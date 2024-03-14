@@ -1,0 +1,74 @@
+﻿@model IEnumerable<CursoMod165.Models.Customer>
+
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Birthday)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NIF)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.USNS)
+            </th>
+            <th>
+                Actions
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>No Data</tr>
+        }
+
+        
+        
+        @foreach(var customer in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Birthday)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.NIF)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => customer.USNS)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@customer.ID">Details</a>
+                    <a asp-action="Edit" asp-route-id="@customer.ID">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@customer.ID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

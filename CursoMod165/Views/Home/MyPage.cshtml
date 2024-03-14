@@ -1,0 +1,35 @@
+﻿@model int
+
+<h1>My Initial Page</h1>
+
+<p>Hello World!!!!!!!</p>
+
+@* Comentário 1 *@
+<!-- Comentário 2-->
+<p>@TempData["Author"]</p>
+<p>@TempData["Data"]</p>
+
+<p>@ViewBag.X</p>
+
+<p>@ViewData["Y"]</p>
+
+<h2>Lista ViewData</h2>
+<ul>
+    @foreach (var item in ViewData["list"] as List<string>)
+    {
+        <li>@item</li>
+    }
+</ul>
+
+<h2>Lista ViewBag</h2>
+<ol>
+    @foreach (var item in ViewBag.list)
+    {
+        <li>@item</li>
+    }
+</ol>
+
+
+<p>Page Counter: @Model</p>
+
+
