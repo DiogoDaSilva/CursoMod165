@@ -13,5 +13,9 @@ namespace CursoMod165.Data
 
         // Tables
         public DbSet<Customer> Customers { get; set; } = default!;
+
+        public DbSet<Staff> Staffs { get; set; } = default!;
+
+        public DbSet<StaffRole> StaffRoles { get; set;} = default!;
     }
 }

@@ -1,15 +1,16 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace CursoMod165.Controllers
 {
-    public class CustomerController : Controller
+    public class StaffController : Controller
     {
-
         private readonly ApplicationDbContext _context;
 
-        public CustomerController(ApplicationDbContext context)
+        public StaffController(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -17,71 +18,75 @@ namespace CursoMod165.Controllers
 
         public IActionResult Index()
         {
-            IEnumerable<Customer> customers = _context.Customers.ToList();
+            IEnumerable<Staff> Staffs = _context
+                                            .Staffs
+                                            .Include(s => s.StaffRole)
+                                            .ToList();
 
-            return View(customers);
+            return View(Staffs);
         }
 
         [HttpGet]
         public IActionResult Create()
         {
+            
+            ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
+
             return View();
         }
 
 
         [HttpPost]
-        public IActionResult Create(Customer customer)
+        public IActionResult Create(Staff Staff)
         {
             if (ModelState.IsValid)
             {
-                // TODO Criar novo customer
-                _context.Customers.Add(customer);
+                _context.Staffs.Add(Staff);
                 _context.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
 
-            return View(customer);
+            return View(Staff);
         }
 
         public IActionResult Details(int id)
         {
-            Customer? customer = _context.Customers.Find(id);
+            Staff? Staff = _context.Staffs.Find(id);
 
-            if (customer == null)
+            if (Staff == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(customer);
+            return View(Staff);
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            Customer? customer = _context.Customers.Find(id);
+            Staff? Staff = _context.Staffs.Find(id);
 
-            if (customer == null)
+            if (Staff == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(customer);
+            return View(Staff);
         }
 
         [HttpPost]
-        public IActionResult Edit(Customer customer)
+        public IActionResult Edit(Staff Staff)
         {
 
             if (ModelState.IsValid)
             {
-                _context.Customers.Update(customer);
+                _context.Staffs.Update(Staff);
                 _context.SaveChanges();
-                // return RedirectToAction(nameof(Index));
             }
 
-            return View(customer);
+            return View(Staff);
         }
 
 
@@ -93,14 +98,14 @@ namespace CursoMod165.Controllers
                 return NotFound();
             }
 
-            Customer? customer = _context.Customers.Find(id);
+            Staff? Staff = _context.Staffs.Find(id);
 
-            if (customer == null)
+            if (Staff == null)
             {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(customer);
+            return View(Staff);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -111,43 +116,16 @@ namespace CursoMod165.Controllers
                 return NotFound();
             }
 
-            Customer? customer = _context.Customers.Find(id);
+            Staff? Staff = _context.Staffs.Find(id);
 
-            if (customer != null)
+            if (Staff != null)
             {
-                _context.Customers.Remove(customer);
+                _context.Staffs.Remove(Staff);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index)); 
-            }
-
-            return View(customer);
-        }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        public IActionResult EditNum(string num)
-        {
-            int numInt = int.Parse(num);
-            Customer? customer = _context.Customers.Find(numInt);
-
-            if (customer == null)
-            {
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(customer);
+            return View(Staff);
         }
     }
 }
