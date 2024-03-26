@@ -31,6 +31,7 @@ namespace CursoMod165.Controllers
         {
             
             ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
+            ViewBag.MedicStaffRoleID = _context.StaffRoles.First(sr => sr.Name == "Médico").ID;
 
             return View();
         }
@@ -47,6 +48,8 @@ namespace CursoMod165.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
+            ViewBag.MedicStaffRoleID = _context.StaffRoles.First(sr => sr.Name == "Médico").ID;
 
             return View(Staff);
         }

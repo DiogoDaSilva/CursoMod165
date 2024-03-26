@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations;
@@ -15,6 +16,7 @@ namespace CursoMod165.Models
         public string Name { get; set; }
 
         [StringLength(9)]
+        [Range(0, 999999999)]
         [Required]
         public string EmployeeNumber{ get; set; }
 
@@ -60,6 +62,9 @@ namespace CursoMod165.Models
         [Display(Name = "Role")]
         [Required]
         public int StaffRoleID { get; set;}
+
+        [Display(Name = "Specialty")]
+        public Specialty? Specialty { get; set; }
 
     }
 }
