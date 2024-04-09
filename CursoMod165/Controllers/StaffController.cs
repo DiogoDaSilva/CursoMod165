@@ -29,9 +29,7 @@ namespace CursoMod165.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            
-            ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
-            ViewBag.MedicStaffRoleID = _context.StaffRoles.First(sr => sr.Name == "Médico").ID;
+            this.SetupStaffModel();
 
             return View();
         }
@@ -48,8 +46,7 @@ namespace CursoMod165.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
-            ViewBag.MedicStaffRoleID = _context.StaffRoles.First(sr => sr.Name == "Médico").ID;
+            this.SetupStaffModel();
 
             return View(Staff);
         }
@@ -76,6 +73,8 @@ namespace CursoMod165.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
+            this.SetupStaffModel();
+
             return View(Staff);
         }
 
@@ -88,6 +87,8 @@ namespace CursoMod165.Controllers
                 _context.Staffs.Update(Staff);
                 _context.SaveChanges();
             }
+
+            this.SetupStaffModel();
 
             return View(Staff);
         }
@@ -129,6 +130,12 @@ namespace CursoMod165.Controllers
             }
 
             return View(Staff);
+        }
+
+        private void SetupStaffModel()
+        {
+            ViewBag.StaffRoles = new SelectList(_context.StaffRoles, "ID", "Name");
+            ViewBag.MedicStaffRoleID = _context.StaffRoles.First(sr => sr.Name == "Medic").ID;
         }
     }
 }

@@ -17,5 +17,7 @@ namespace CursoMod165.Data
         public DbSet<Staff> Staffs { get; set; } = default!;
 
         public DbSet<StaffRole> StaffRoles { get; set;} = default!;
+
+        public DbSet<Appointment> Appointments { get; set; } = default!;
     }
 }
