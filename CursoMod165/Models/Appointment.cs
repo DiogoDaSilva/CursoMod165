@@ -20,7 +20,7 @@ namespace CursoMod165.Models
         public DateTime Time { get; set; }
 
         [DataType(DataType.MultilineText)]
-        public string Informations { get; set; }
+        public string Informations { get; set; } = "";
 
         [Required]
         public bool IsDone { get; set; }

@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<CursoMod165.Models.Appointment>
 
-<h1>Index</h1>
+<h1>Tomorrow's Appointments</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
 </p>
 
 <p>
-    <a asp-action="TomorrowsAppointments" class="btn btn-primary">Check tomorrow's Appointments</a>
+    <a asp-action="TomorrowAppointments" class="btn btn-primary">Check tomorrow's Appointments</a>
 </p>
 
 
@@ -73,33 +73,3 @@
         }
     </tbody>
 </table>
-
-
-@(
-Html
-        .Grid(Model)
-        .Build(columns =>
-        {
-            columns.Add(ap => ap.Number).Titled("Ap. Number");
-            columns.Add(ap => ap.Date).Titled("Date").Formatted("{0:dd-MM-yyyy}")
-                                                     .Filterable(GridFilterType.Double);
-            columns.Add(ap => ap.Time).Titled("Time").Formatted("{0:t}");
-            columns.Add(ap => ap.Customer.Name).Titled("Customer");
-            columns.Add(ap => ap.Staff.Name).Titled("Staff");
-            columns.Add(ap => ap.IsDone).Titled("Done?")
-                .RenderedAs(ap => (ap.IsDone == true ? "Yes" : "No"))
-                .UsingFilterOptions(new[]
-                {
-                    new SelectListItem{ Value = "true", Text = "Yes" },
-                    new SelectListItem{ Value = "false", Text = "No" }
-                });
-
-            columns.Add(ap =>
-                Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new {@class="btn btn-primary"}));
-            columns.Add(ap =>
-                Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-primary" }));
-        })
-        .Filterable()
-        .Sortable()
-        
-)
