@@ -1,17 +1,23 @@
 ﻿@model IEnumerable<CursoMod165.Models.Appointment>
+@{
+    bool dateExists = ViewBag.StartDate != null;
+}
 
-<h1>Index</h1>
+<h1>Next Week's Appointments  
+        @if (dateExists)
+        {
+            <span>
+                (@ViewBag.StartDate.ToShortDateString() - @ViewBag.EndDate.ToShortDateString())
+            </span>
+        }
+</h1>
 
 <p>
-    <a asp-action="Create">@SharedLocalizer["Create New"]</a>
+    <a asp-action="Create">Create New</a>
 </p>
 
 <p>
     <a asp-action="TomorrowsAppointments" class="btn btn-primary">Check tomorrow's Appointments</a>
-</p>
-
-<p>
-    <a asp-action="NextWeekAppointments" class="btn btn-secondary">Check Next Week's Appointments</a>
 </p>
 
 @(

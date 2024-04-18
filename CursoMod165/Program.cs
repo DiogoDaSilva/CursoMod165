@@ -1,6 +1,11 @@
+using CursoMod165;
 using CursoMod165.Data;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +17,39 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
+//builder.Services.AddControllersWithViews();
+
+// Traduções
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+const string defaultCulture = "pt";
+
+CultureInfo ptCI = new CultureInfo(defaultCulture);
+
+var supportedCultures = new []
+{
+    ptCI,
+    new CultureInfo("en-UK"),
+    new CultureInfo("es")
+};
+
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(defaultCulture);
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
+builder.Services
+        .AddMvc()
+        .AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix)
+        .AddDataAnnotationsLocalization(options =>
+        {
+            options.DataAnnotationLocalizerProvider = (type, factory) => factory.Create(typeof(Resource));
+        });
+
+
+
 
 var app = builder.Build();
 
@@ -34,6 +71,12 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+
+
+// Aplicar Traduções
+app.UseRequestLocalization(
+    app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value
+);
 
 app.MapControllerRoute(
     name: "default",

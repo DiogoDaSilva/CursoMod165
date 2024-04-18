@@ -19,7 +19,7 @@ namespace CursoMod165.Controllers
         public IActionResult Index()
         {
             IEnumerable<Appointment> appointments = _context.Appointments
-                                                            .Include(appointment => appointment.Staff)
+                                                            .Include(appointment => appointment.Staff.StaffRole)
                                                             .Include(appointment => appointment.Customer)
                                                             .ToList();
             
@@ -31,11 +31,33 @@ namespace CursoMod165.Controllers
         public IActionResult TomorrowsAppointments()
         {
             var tomorrowsAppointments = _context.Appointments
-                                                .Include(appointment => appointment.Staff)
+                                                .Include(appointment => appointment.Staff.StaffRole)
                                                 .Include(appointment => appointment.Customer)
                                                 .Where(appointment => appointment.Date ==  DateTime.Today.AddDays(1))
                                                 .ToList();
             return View(tomorrowsAppointments);
+        }
+
+        public IActionResult NextWeekAppointments()
+        {
+            int x = 1;
+            if (DateTime.Today.DayOfWeek != DayOfWeek.Sunday)
+            {
+                x = 8 - (int)DateTime.Today.DayOfWeek;
+            }
+             
+            DateTime startDate = DateTime.Today.AddDays(x);
+            DateTime endDate   = DateTime.Today.AddDays(x + 4);
+
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+
+            var nextWeekAppointments = _context.Appointments
+                                                .Include(appointment => appointment.Staff.StaffRole)
+                                                .Include(appointment => appointment.Customer)
+                                                .Where(appointment => appointment.Date >= startDate && appointment.Date <= endDate)
+                                                .ToList();
+            return View(nextWeekAppointments);
         }
 
 
