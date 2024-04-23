@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="Administrative" xml:space="preserve">
+    <value>Administrativa(o)</value>
+  </data>
   <data name="Appointment" xml:space="preserve">
     <value>Consulta</value>
+  </data>
+  <data name="Appointment #" xml:space="preserve">
+    <value>Consulta Nº</value>
   </data>
   <data name="Create New" xml:space="preserve">
     <value>Criar Novo</value>
@@ -129,13 +135,46 @@
   <data name="Date" xml:space="preserve">
     <value>Data</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Remover</value>
+  </data>
+  <data name="Driver" xml:space="preserve">
+    <value>Motorista</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Editar</value>
+  </data>
+  <data name="Informations" xml:space="preserve">
+    <value>Informações</value>
+  </data>
+  <data name="Is Done?" xml:space="preserve">
+    <value>Realizada?</value>
+  </data>
+  <data name="Medic" xml:space="preserve">
+    <value>Médica(o)</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Não</value>
+  </data>
+  <data name="Nurse" xml:space="preserve">
+    <value>Enfermeira(o)</value>
+  </data>
   <data name="Specialty" xml:space="preserve">
     <value>Especialidade</value>
   </data>
   <data name="Staff" xml:space="preserve">
     <value>Equipa</value>
   </data>
-  <data name="StaffRole" xml:space="preserve">
+  <data name="Staff Role" xml:space="preserve">
     <value>Categoria</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>Hora</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Sim</value>
   </data>
 </root>

@@ -19,26 +19,26 @@ Html
         .Grid(Model)
         .Build(columns =>
         {
-            columns.Add(ap => ap.Number).Titled("Ap. Number");
-            columns.Add(ap => ap.Date).Titled("Date").Formatted("{0:dd-MM-yyyy}")
+            columns.Add(ap => ap.Number).Titled(SharedLocalizer["Appointment #"]);
+            columns.Add(ap => ap.Date).Titled(SharedLocalizer["Date"]).Formatted("{0:dd-MMM-yyyy}")
                                                      .Filterable(GridFilterType.Double);
-            columns.Add(ap => ap.Time).Titled("Time").Formatted("{0:t}");
-            columns.Add(ap => ap.Customer.Name).Titled("Customer");
-            columns.Add(ap => ap.Staff.Name).Titled("Staff")
-                .RenderedAs(ap => $"{ap.Staff.Name}  [{ap.Staff.StaffRole.Name}]");
-            columns.Add(ap => ap.Staff.StaffRole.Name).Titled("Staff Role");
-            columns.Add(ap => ap.IsDone).Titled("Done?")
-                .RenderedAs(ap => (ap.IsDone == true ? "Yes" : "No"))
+            columns.Add(ap => ap.Time).Titled(SharedLocalizer["Time"]).Formatted("{0:t}");
+            columns.Add(ap => ap.Customer.Name).Titled(SharedLocalizer["Customer"]);
+            columns.Add(ap => ap.Staff.Name).Titled(SharedLocalizer["Staff"])
+                .RenderedAs(ap => $"{ap.Staff.Name}  [{SharedLocalizer[ap.Staff.StaffRole.Name].Value}]");
+            columns.Add(ap => SharedLocalizer[ap.Staff.StaffRole.Name].Value).Titled(SharedLocalizer["Staff Role"]);
+            columns.Add(ap => ap.IsDone).Titled(SharedLocalizer["Is Done?"])
+                .RenderedAs(ap => (ap.IsDone == true ? SharedLocalizer["Yes"] : SharedLocalizer["No"]))
                 .UsingFilterOptions(new[]
                 {
-                    new SelectListItem{ Value = "true", Text = "Yes" },
-                    new SelectListItem{ Value = "false", Text = "No" }
+                    new SelectListItem{ Value = "true", Text = SharedLocalizer["Yes"].Value },
+                    new SelectListItem{ Value = "false", Text = SharedLocalizer["No"].Value }
                 });
 
             columns.Add(ap =>
-                Html.ActionLink("Edit", "Edit", new { id = ap.ID }, new {@class="btn btn-primary"}));
+                Html.ActionLink(SharedLocalizer["Edit"].Value, "Edit", new { id = ap.ID }, new {@class="btn btn-primary"}));
             columns.Add(ap =>
-                Html.ActionLink("Delete", "Delete", new { id = ap.ID }, new { @class = "btn btn-primary" }));
+                Html.ActionLink(SharedLocalizer["Delete"].Value, "Delete", new { id = ap.ID }, new { @class = "btn btn-primary" }));
         })
         .Filterable()
         .Sortable()

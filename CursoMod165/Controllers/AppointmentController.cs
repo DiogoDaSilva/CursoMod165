@@ -3,7 +3,7 @@ using CursoMod165.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
+using NToastNotify;
 
 namespace CursoMod165.Controllers
 {
@@ -11,9 +11,12 @@ namespace CursoMod165.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public AppointmentController(ApplicationDbContext context)
+        private readonly IToastNotification _toastNotification; // Singleton
+
+        public AppointmentController(ApplicationDbContext context, IToastNotification toastNotification)
         {
             _context = context;
+            _toastNotification = toastNotification;
         }
 
         public IActionResult Index()
@@ -79,9 +82,20 @@ namespace CursoMod165.Controllers
             {
                 _context.Appointments.Add(appointment);
                 _context.SaveChanges();
+
+                // Toastr.SuccessMessage
+                _toastNotification.AddSuccessToastMessage("Appointment successfully created.");
+
                 return RedirectToAction(nameof(Index));
             }
 
+            // Toastr.ErrorMessage
+            _toastNotification.AddErrorToastMessage("Check the form again!",
+                new ToastrOptions { 
+                    Title = "Appointment Creation Error",
+                    TapToDismiss = true,
+                    TimeOut = 0
+                });
             this.SetupAppointments();
             return View(appointment);
         }
