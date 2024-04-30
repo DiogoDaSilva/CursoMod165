@@ -1,6 +1,8 @@
 using CursoMod165;
 using CursoMod165.Data;
+using CursoMod165.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +58,7 @@ builder.Services
         });
 
 
+builder.Services.AddTransient<IEmailSender, EmailSender>();
 
 
 var app = builder.Build();
