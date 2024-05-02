@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using NToastNotify;
+using System.Text;
 
 namespace CursoMod165.Controllers
 {
@@ -99,6 +100,44 @@ namespace CursoMod165.Controllers
                 // Toastr.SuccessMessage
                 _toastNotification.AddSuccessToastMessage("Appointment successfully created.");
 
+
+                
+                Customer? customer = _context.Customers.Find(appointment.CustomerID);
+                Staff? staff = _context.Staffs
+                                        .Include(s => s.StaffRole)
+                                        .Where(s => s.ID == appointment.StaffID)
+                                        .Single();
+                
+                if (customer == null || staff == null)
+                {
+                    return NotFound();
+                }
+
+                var culture = Thread.CurrentThread.CurrentUICulture;
+
+                string template = System.IO.File.ReadAllText(
+                    Path.Combine(
+                        Directory.GetCurrentDirectory(),
+                        "EmailTemplates",
+                        $"create_appointment.{culture.Name}.html"
+                    )
+                );
+
+
+                StringBuilder htmlBody = new StringBuilder(template);
+                htmlBody.Replace("##CUSTOMER_NAME##", customer.Name);
+                htmlBody.Replace("##APPOINTMENT_DATE##", appointment.Date.ToShortDateString());
+                htmlBody.Replace("##APPOINTMENT_TIME##", appointment.Time.ToShortTimeString());
+                htmlBody.Replace("##STAFF_ROLE##", staff.StaffRole.Name);
+                htmlBody.Replace("##STAFF_NAME##", staff.Name);
+
+               
+
+
+                
+                _emailSender.SendEmailAsync(customer.Email, "Appointment Scheduled",
+                    htmlBody.ToString());
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -151,25 +190,7 @@ namespace CursoMod165.Controllers
                         TapToDismiss = true
                     });
 
-                //
-                // Message IStringLocalizer
-                //
-                string message2 =
-                    string.Format(_localizer["<b>Appointment # {0}</b> successfully edited!"].Value,
-                                  appointment.Number);
-
-                message2 += "<br />" + string.Format(_localizer["Date: <b>{0}</b> at <b>{1}</b>"].Value,
-                                  appointment.Date.ToShortDateString(),
-                                  appointment.Time.ToShortTimeString());
-
-                _toastNotification.AddSuccessToastMessage(message2,
-                    new ToastrOptions
-                    {
-                        Title = _localizer["Success"].Value,
-                        TimeOut = 0,
-                        TapToDismiss = true
-                    });
-
+                
 
                 _emailSender.SendEmailAsync("diogothesilva@gmail.com",
                     "Edit Appointment", "Edited successfully");

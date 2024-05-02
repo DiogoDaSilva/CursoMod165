@@ -32,7 +32,7 @@ CultureInfo ptCI = new CultureInfo(defaultCulture);
 var supportedCultures = new []
 {
     ptCI,
-    new CultureInfo("en-UK"),
+    new CultureInfo("en"),
     new CultureInfo("es")
 };
 
@@ -58,8 +58,8 @@ builder.Services
         });
 
 
+//builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddTransient<IEmailSender, EmailSender>();
-
 
 var app = builder.Build();
 
