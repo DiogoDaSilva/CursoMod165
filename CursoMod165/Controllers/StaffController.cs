@@ -1,11 +1,13 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace CursoMod165.Controllers
 {
+    [Authorize]
     public class StaffController : Controller
     {
         private readonly ApplicationDbContext _context;

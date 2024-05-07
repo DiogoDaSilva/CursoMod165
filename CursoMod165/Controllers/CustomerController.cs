@@ -1,9 +1,11 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CursoMod165.Controllers
 {
+    [Authorize]
     public class CustomerController : Controller
     {
 

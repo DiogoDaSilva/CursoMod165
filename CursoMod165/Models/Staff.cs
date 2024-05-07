@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
@@ -66,5 +67,16 @@ namespace CursoMod165.Models
         [Display(Name = "Specialty")]
         public Specialty? Specialty { get; set; }
 
+        //public string UserID { get; set; }
+
+        //[ForeignKey("UserID")]
+        //public CursoMod165User User { get; set; }
+
     }
+
+    //public class CursoMod165User : IdentityUser
+    //{
+    //    public decimal Salary;
+    //    public string EmployeeNumber;
+    //}
 }

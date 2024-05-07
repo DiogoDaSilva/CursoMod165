@@ -1,5 +1,6 @@
 ﻿using CursoMod165.Data;
 using CursoMod165.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -11,6 +12,7 @@ using System.Text;
 
 namespace CursoMod165.Controllers
 {
+    [Authorize]
     public class AppointmentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -57,24 +59,81 @@ namespace CursoMod165.Controllers
 
         public IActionResult NextWeekAppointments()
         {
+            DateTime startDate, endDate;
+            GetNextWeeksDates(out startDate, out endDate);
+
+            ViewBag.StartDate = startDate;
+            ViewBag.EndDate = endDate;
+            List<Appointment> nextWeekAppointments = GetAppointmentsBetweenDates(startDate, endDate);
+            return View(nextWeekAppointments);
+        }
+
+        private List<Appointment> GetAppointmentsBetweenDates(DateTime startDate, DateTime endDate)
+        {
+            return _context.Appointments
+                            .Include(appointment => appointment.Staff.StaffRole)
+                            .Include(appointment => appointment.Customer)
+                            .Where(appointment => appointment.Date >= startDate && appointment.Date <= endDate)
+                            .ToList();
+        }
+
+        private static void GetNextWeeksDates(out DateTime startDate, out DateTime endDate)
+        {
             int x = 1;
             if (DateTime.Today.DayOfWeek != DayOfWeek.Sunday)
             {
                 x = 8 - (int)DateTime.Today.DayOfWeek;
             }
-             
-            DateTime startDate = DateTime.Today.AddDays(x);
-            DateTime endDate   = DateTime.Today.AddDays(x + 4);
 
+            startDate = DateTime.Today.AddDays(x);
+            endDate = DateTime.Today.AddDays(x + 4);
+        }
+
+        public IActionResult EmailReminderNextWeeksAppointments()
+        {
+            // Obter data de início e fim da próxima semana
+            DateTime startDate, endDate;
+            GetNextWeeksDates(out startDate, out endDate);
+
+
+            // Obter as consultas da próxima semana
             ViewBag.StartDate = startDate;
             ViewBag.EndDate = endDate;
+            List<Appointment> nextWeekAppointments = GetAppointmentsBetweenDates(startDate, endDate);
 
-            var nextWeekAppointments = _context.Appointments
-                                                .Include(appointment => appointment.Staff.StaffRole)
-                                                .Include(appointment => appointment.Customer)
-                                                .Where(appointment => appointment.Date >= startDate && appointment.Date <= endDate)
-                                                .ToList();
-            return View(nextWeekAppointments);
+
+            // Obter a língua e o respectivo template de e-mail
+            var culture = Thread.CurrentThread.CurrentUICulture;
+
+            string template = System.IO.File.ReadAllText(
+                Path.Combine(
+                    Directory.GetCurrentDirectory(),
+                    "EmailTemplates",
+                    $"next_week_appointment.{culture.Name}.html"
+                )
+            );
+
+            // Adaptar o template a cada consulta e enviar o e-mail
+            foreach(var appointment in nextWeekAppointments)
+            {
+                StringBuilder htmlBody = new StringBuilder(template);
+                htmlBody.Replace("##CUSTOMER_NAME##", appointment.Customer.Name);
+                htmlBody.Replace("##APPOINTMENT_DATE##", appointment.Date.ToShortDateString());
+                htmlBody.Replace("##APPOINTMENT_TIME##", appointment.Time.ToShortTimeString());
+                htmlBody.Replace("##STAFF_ROLE##", appointment.Staff.StaffRole.Name);
+                htmlBody.Replace("##STAFF_NAME##", appointment.Staff.Name);
+
+
+                _emailSender.SendEmailAsync(appointment.Customer.Email, "Reminder of Scheduled Appointment",
+                    htmlBody.ToString());
+
+
+            }
+            
+            _toastNotification.AddSuccessToastMessage($"{nextWeekAppointments.Count} Emails successfully sent.");
+
+
+            return RedirectToAction(nameof(NextWeekAppointments));
         }
 
 
