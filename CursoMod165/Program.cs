@@ -34,7 +34,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddControllersWithViews();
 
-// Traduções
+// Traduï¿½ï¿½es
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 const string defaultCulture = "pt";
@@ -95,7 +95,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 
-// Aplicar Traduções
+// Aplicar Traduï¿½ï¿½es
 app.UseRequestLocalization(
     app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value
 );
