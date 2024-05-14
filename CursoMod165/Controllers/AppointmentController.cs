@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using NToastNotify;
 using System.Text;
+using static CursoMod165.CursoMod165Constants;
 
 namespace CursoMod165.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = POLICIES.APP_POLICY.NAME)]
     public class AppointmentController : Controller
     {
         private readonly ApplicationDbContext _context;

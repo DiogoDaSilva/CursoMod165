@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using static CursoMod165.CursoMod165Constants;
 
 namespace CursoMod165.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]
     public class StaffController : Controller
     {
         private readonly ApplicationDbContext _context;

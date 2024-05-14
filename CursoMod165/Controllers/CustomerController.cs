@@ -2,10 +2,11 @@
 using CursoMod165.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using static CursoMod165.CursoMod165Constants;
 
 namespace CursoMod165.Controllers
 {
-    [Authorize]
+    [Authorize(Policy = POLICIES.APP_POLICY.NAME)]
     public class CustomerController : Controller
     {
 

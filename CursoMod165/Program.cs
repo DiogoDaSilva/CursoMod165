@@ -1,5 +1,6 @@
 using CursoMod165;
 using CursoMod165.Data;
+using CursoMod165.Data.SeedDatabase;
 using CursoMod165.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NToastNotify;
 using System.Globalization;
+using static CursoMod165.CursoMod165Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +35,16 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 //builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(POLICIES.APP_POLICY.NAME, policy => policy.RequireRole(POLICIES.APP_POLICY.APP_POLICY_ROLES));
+    options.AddPolicy(POLICIES.APP_POLICY_ADMIN.NAME, policy => policy.RequireRole(POLICIES.APP_POLICY_ADMIN.APP_POLICY_ROLES));
+});
+
+
+
 
 // Tradu��es
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
@@ -122,6 +134,5 @@ void SeedDB()
     var userManager = services.GetRequiredService <UserManager<IdentityUser>>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-    // TODO
-    // SeedDatabase.Seed(dbContext, userManager, roleManager);
+    SeedDatabase.Seed(dbContext, userManager, roleManager);
 }
