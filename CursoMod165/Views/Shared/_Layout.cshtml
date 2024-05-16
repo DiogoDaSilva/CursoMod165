@@ -1,5 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Authorization
+
 @inject SignInManager<IdentityUser> SignInManager;
+@inject IAuthorizationService _authorizationService;
+
 
 
 
@@ -35,16 +39,21 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="MyPage">My Page</a>
                         </li>
 
-                        @if (SignInManager.IsSignedIn(User))
+                
+                        @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY.NAME)).Succeeded)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Index">Customers</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">Staff</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Index">Appointments</a>
+                            </li>
+                        }
+
+                        @if ((await _authorizationService.AuthorizeAsync(User, CursoMod165Constants.POLICIES.APP_POLICY_ADMIN.NAME)).Succeeded)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Staff" asp-action="Index">Staff</a>
                             </li>
                         }
 

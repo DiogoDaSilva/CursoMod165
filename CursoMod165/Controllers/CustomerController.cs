@@ -89,6 +89,7 @@ namespace CursoMod165.Controllers
 
 
         [HttpGet]
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,6 +108,7 @@ namespace CursoMod165.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Policy = POLICIES.APP_POLICY_ADMIN.NAME)]
         public IActionResult DeleteConfirmed(int? id)
         {
             if (id == null)

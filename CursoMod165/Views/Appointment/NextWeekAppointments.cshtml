@@ -18,7 +18,13 @@
 
 <p>
     <a asp-action="TomorrowsAppointments" class="btn btn-primary">Check tomorrow's Appointments</a>
-    <a asp-action="EmailReminderNextWeeksAppointments" class="btn btn-warning">Send Reminder E-mail</a>
+
+    @* Razor é server based *@
+    @if (User.IsInRole(CursoMod165Constants.ROLES.ADMIN))
+    {
+        <a asp-action="EmailReminderNextWeeksAppointments" class="btn btn-warning">Send Reminder E-mail</a>
+    }
+
 </p>
 
 @(
